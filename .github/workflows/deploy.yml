@@ -1,0 +1,44 @@
+name: Build, Push, Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: ghcr.io/<iamamanul>/todo-app
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t $IMAGE_NAME:latest .
+
+      - name: Push image
+        run: docker push $IMAGE_NAME:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH to EC2 and rollout restart
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/todo-app || exit 0
+            kubectl -n todo-app set image deployment/Todo-App Todo-App=ghcr.io/<iamamanul>/todo-app:latest --record || true
+            kubectl -n todo-app rollout restart deployment Todo-App
+            kubectl -n todo-app get pods -o wide
+            sleep 5
+            curl -I http://localhost || true
+
