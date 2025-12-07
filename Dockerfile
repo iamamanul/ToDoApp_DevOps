@@ -5,15 +5,20 @@ WORKDIR /app
 # Prisma needs OpenSSL 3
 ENV NODE_OPTIONS="--openssl-legacy-provider"
 
+# Copy package files and install dependencies first for caching efficiency
 COPY package*.json ./
-COPY prisma ./prisma
+RUN npm install
+
+# Copy the rest of the source (including your Prisma schema)
 COPY . .
 
-RUN npm install
+# Run codegen and build
 RUN npx prisma generate
 RUN npm run build
 
-# -------- RUNNER --------
+# ----------------------------------------------------
+# -------- RUNNER (Production) --------
+# ----------------------------------------------------
 FROM node:20-bullseye AS runner
 WORKDIR /app
 
@@ -21,15 +26,18 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV NODE_OPTIONS="--openssl-legacy-provider"
 
+# Copy package files and prisma schema
 COPY package*.json ./
 COPY prisma ./prisma
 
+# Install only production dependencies
 RUN npm install --omit=dev
 
+# Copy build artifacts from builder stage
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/client
+
+# NOTE: Removed redundant copies of node_modules/.prisma and @prisma/client
 
 EXPOSE 3000
 CMD ["npm","start"]
