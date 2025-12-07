@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: Todo-App-svc
+  name: todo-app-svc
   namespace: todo-app
 spec:
   type: ClusterIP
