@@ -22,8 +22,8 @@ spec:
           imagePullPolicy: Always
           envFrom:
             - secretRef:
-                 name: app-secrets
-          env: # <--- ADD THIS SECTION
+                name: app-secrets
+          env:
             - name: NODE_OPTIONS
               value: "--openssl-legacy-provider"
           command: ["npx", "prisma", "migrate", "deploy"] 
