@@ -1,5 +1,5 @@
 # Dockerfile (multi-stage)
-FROM node:20-alpine AS builder
+FROM node:20-bookworm AS builder
 WORKDIR /app
 
 # install deps
@@ -14,7 +14,7 @@ RUN npx prisma generate
 # build Next.js
 RUN npm run build
 
-FROM node:20-alpine AS runner
+FROM node:20-bookworm AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
