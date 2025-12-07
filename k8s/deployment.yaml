@@ -24,7 +24,7 @@ spec:
           command: ["sh", "-c", "npx prisma migrate deploy"]
       containers:
         - name: web
-          image: ghcr.io/<iamamanul>/todo-app:latest
+          image: ghcr.io/iamamanul/todo-app:latest
           ports:
             - containerPort: 3000
           envFrom:
