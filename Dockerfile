@@ -2,6 +2,9 @@
 FROM node:20.11-bullseye AS builder
 WORKDIR /app
 
+# Install OpenSSL for Prisma
+RUN apt-get update && apt-get install -y openssl
+
 COPY package*.json ./
 COPY prisma ./prisma
 COPY . .
@@ -10,9 +13,13 @@ RUN npm install
 RUN npx prisma generate
 RUN npm run build
 
+
 # -------- RUNNER --------
 FROM node:20.11-bullseye AS runner
 WORKDIR /app
+
+# Install OpenSSL for Prisma
+RUN apt-get update && apt-get install -y openssl
 
 ENV NODE_ENV=production
 ENV PORT=3000
@@ -29,4 +36,3 @@ COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/clie
 
 EXPOSE 3000
 CMD ["npm","start"]
-
