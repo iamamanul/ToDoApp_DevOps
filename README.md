@@ -29,9 +29,9 @@ A modern todo application with user authentication and real-time updates.
 2. Set up environment variables:
    Create a `.env.local` file in the root directory with:
    ```env
-   DATABASE_URL="postgresql://neondb_owner:npg_nfWyYG5B8NvM@ep-proud-sky-ah1eeihp-pooler.c-3.us-east-1.aws.neon.tech/To-Do-App?sslmode=require&channel_binding=require"
-   NEXTAUTH_URL="http://localhost:3000"
-   NEXTAUTH_SECRET="your-secret-key-here-change-this-to-a-secure-random-string"
+   DATABASE_URL=""
+   NEXTAUTH_URL=""
+   NEXTAUTH_SECRET=""
    ```
 
 3. Run database migrations:
