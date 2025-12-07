@@ -7,11 +7,11 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: Todo-App
+      app: todo-app-nextjs
   template:
     metadata:
       labels:
-        app: Todo-App
+        app: todo-app-nextjs
     spec:
       imagePullSecrets:
         - name: ghcr-pull-secret

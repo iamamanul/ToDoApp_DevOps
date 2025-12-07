@@ -36,7 +36,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~/todo-app || exit 0
-            kubectl -n todo-app set image deployment/Todo-App Todo-App=ghcr.io/<iamamanul>/todo-app:latest --record || true
+            kubectl -n todo-app set image deployment/todo-app-nextjs todo-app-nextjs=ghcr.io/<iamamanul>/todo-app:latest --record || true
             kubectl -n todo-app rollout restart deployment Todo-App
             kubectl -n todo-app get pods -o wide
             sleep 5
