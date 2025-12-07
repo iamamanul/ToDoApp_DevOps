@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: Todo-App
+  name: todo-app-nextjs
   namespace: todo-app
 spec:
   replicas: 3
