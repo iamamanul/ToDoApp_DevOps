@@ -18,13 +18,15 @@ spec:
       initContainers:
         - name: migrate
           image: ghcr.io/iamamanul/todo-app:latest
+          imagePullPolicy: Always
           envFrom:
             - secretRef:
                 name: app-secrets
-          command: ["sh", "-c", "npx prisma migrate deploy"]
+          command: ["sh", "-c", "export NODE_OPTIONS=--openssl-legacy-provider && npx prisma migrate deploy"]
       containers:
         - name: web
           image: ghcr.io/iamamanul/todo-app:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           envFrom:
