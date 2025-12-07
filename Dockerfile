@@ -1,22 +1,16 @@
-# ---------- BUILD STAGE ----------
-FROM node:20-bookworm AS builder
+# ---- BUILD ----
+FROM node:18-bullseye AS builder
 WORKDIR /app
 
-# copy entire project first
+COPY package*.json ./
 COPY . .
 
-# install dependencies
 RUN npm install
-
-# prisma client generation
 RUN npx prisma generate
-
-# build Next.js
 RUN npm run build
 
-
-# ---------- RUN STAGE ----------
-FROM node:20-bookworm
+# ---- RUN ----
+FROM node:18-bullseye
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -33,4 +27,4 @@ COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/clie
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 EXPOSE 3000
-CMD ["npm","start"]
+CMD ["npm", "start"]
