@@ -5,7 +5,11 @@ import { getToken } from "next-auth/jwt";
 const publicRoutes = ["/login", "/signup"];
 
 export async function middleware(request: NextRequest) {
-  const token = await getToken({ req: request });
+  const token = await getToken({
+    req: request,
+    // Explicitly pass the secret to avoid edge/env issues in production
+    secret: process.env.NEXTAUTH_SECRET,
+  });
   const isAuthenticated = !!token;
   const isPublicRoute = publicRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route)
