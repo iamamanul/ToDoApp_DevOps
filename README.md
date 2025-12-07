@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Todo App with Next.js and PostgreSQL
+
+A modern todo application with user authentication and real-time updates.
+
+## Features
+
+- User authentication (Sign up, Login, Logout)
+- Create, read, update, and delete todos
+- Mark todos as complete/incomplete
+- Responsive design
+- Secure API routes
+- PostgreSQL database with Prisma ORM
+
+## Prerequisites
+
+- Node.js 18+
+- PostgreSQL database
+- npm or yarn
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. Set up environment variables:
+   Create a `.env.local` file in the root directory with:
+   ```env
+   DATABASE_URL="postgresql://neondb_owner:npg_nfWyYG5B8NvM@ep-proud-sky-ah1eeihp-pooler.c-3.us-east-1.aws.neon.tech/To-Do-App?sslmode=require&channel_binding=require"
+   NEXTAUTH_URL="http://localhost:3000"
+   NEXTAUTH_SECRET="your-secret-key-here-change-this-to-a-secure-random-string"
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Run database migrations:
+   ```bash
+   npx prisma migrate dev --name init
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. Seed the database (optional):
+   ```bash
+   npx ts-node src/scripts/seed.ts
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5. Start the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-## Learn More
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-To learn more about Next.js, take a look at the following resources:
+## Available Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `npm run dev` - Start the development server
+- `npm run build` - Build the application for production
+- `npm start` - Start the production server
+- `npm run lint` - Run ESLint
+- `npx prisma generate` - Generate Prisma Client
+- `npx prisma migrate dev` - Run database migrations
+- `npx ts-node src/scripts/seed.ts` - Seed the database with test data
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech Stack
 
-## Deploy on Vercel
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- NextAuth.js
+- Prisma
+- PostgreSQL
+- Heroicons
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Usage
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Navigate to `/signup` to create a new account
+2. Login with your credentials
+3. You'll be redirected to the todo list page
+4. Add, edit, delete, and complete todos
+5. Each user has their own private todo list
+
+## Test User
+
+After seeding the database, you can use:
+- Email: test@example.com
+- Password: password123
