@@ -17,7 +17,7 @@ spec:
         - name: ghcr-pull-secret
       initContainers:
         - name: migrate
-          image: ghcr.io/<iamamanul>/todo-app:latest
+          image: ghcr.io/iamamanul/todo-app:latest
           envFrom:
             - secretRef:
                 name: app-secrets
