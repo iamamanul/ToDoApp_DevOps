@@ -1,9 +1,9 @@
 # -------- BUILDER --------
-FROM node:20.11-bullseye AS builder
+FROM node:20-bullseye AS builder
 WORKDIR /app
 
-# Install OpenSSL for Prisma
-RUN apt-get update && apt-get install -y openssl
+# Prisma needs OpenSSL 3
+ENV NODE_OPTIONS="--openssl-legacy-provider"
 
 COPY package*.json ./
 COPY prisma ./prisma
@@ -13,16 +13,13 @@ RUN npm install
 RUN npx prisma generate
 RUN npm run build
 
-
 # -------- RUNNER --------
-FROM node:20.11-bullseye AS runner
+FROM node:20-bullseye AS runner
 WORKDIR /app
-
-# Install OpenSSL for Prisma
-RUN apt-get update && apt-get install -y openssl
 
 ENV NODE_ENV=production
 ENV PORT=3000
+ENV NODE_OPTIONS="--openssl-legacy-provider"
 
 COPY package*.json ./
 COPY prisma ./prisma
