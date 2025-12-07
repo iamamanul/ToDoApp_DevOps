@@ -4,12 +4,11 @@ WORKDIR /app
 
 # install deps
 COPY package*.json ./
+# Copy the source before running npm ci in the builder stage.
+COPY . .
 RUN npm ci
 
-# copy source
-COPY . .
-
-# prisma codegen (no DB required for generate)
+# prisma codegen 
 RUN npx prisma generate
 
 # build Next.js
@@ -23,8 +22,7 @@ ENV PORT=3000
 # 1. Copy package files
 COPY package*.json ./
 
-# 2.Copy the prisma directory before running npm ci.
-# This prevents the 'prisma generate' postinstall script from failing.
+# 2. FIX (from previous conversation): Copy the prisma directory before running npm ci.
 COPY --from=builder /app/prisma ./prisma
 
 # 3. Install dependencies (which now succeeds)
