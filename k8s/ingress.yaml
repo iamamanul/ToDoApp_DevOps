@@ -1,19 +1,53 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: todo-ingress
-  namespace: todo-app
+  name: all-services-ingress
+  namespace: todo-app # Use your current namespace or create a new one for all Ingress rules
   annotations:
     kubernetes.io/ingress.class: "traefik"
+    # Traefik configuration to strip paths before routing to the application
+    traefik.ingress.kubernetes.io/app-root: "/grafana"
+    traefik.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: traefik
   rules:
     - http:
         paths:
+          # 1. TODO APP (ROOT PATH)
           - path: /
             pathType: Prefix
             backend:
               service:
                 name: todo-app-svc
+                port:
+                  number: 80 # Service port exposed by your existing Todo App service
+
+          # 2. ARGOCD (Desired Port 9000 exposed via Service Port 80)
+          - path: /argocd
+            pathType: Prefix
+            backend:
+              service:
+                # Name of the ArgoCD server Service after Helm install
+                name: argocd-server
+                port:
+                  number: 80 
+          
+          # 3. PROMETHEUS (Desired Port 9090 exposed via Service Port 9090)
+          - path: /prometheus
+            pathType: Prefix
+            backend:
+              service:
+                # Name of the Prometheus server Service after Helm install (standard name)
+                name: prometheus-kube-prometheus-prometheus
+                port:
+                  number: 9090
+          
+          # 4. GRAFANA (Desired Port 3000 exposed via Service Port 80)
+          - path: /grafana
+            pathType: Prefix
+            backend:
+              service:
+                # Name of the Grafana Service (standard name in kube-prometheus-stack)
+                name: prometheus-grafana
                 port:
                   number: 80
