@@ -5,45 +5,15 @@ metadata:
   namespace: todo-app
   annotations:
     kubernetes.io/ingress.class: "traefik"
-    traefik.ingress.kubernetes.io/app-root: "/grafana"
-    traefik.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: traefik
   rules:
     - http:
         paths:
-          # 1. TODO APP (ROOT PATH) - in todo-app namespace
           - path: /
             pathType: Prefix
             backend:
               service:
                 name: todo-app-svc
-                port:
-                  number: 80
-
-          # 2. ARGOCD - in argocd namespace (use FQDN)
-          - path: /argocd
-            pathType: Prefix
-            backend:
-              service:
-                name: argocd-server.argocd.svc.cluster.local
-                port:
-                  number: 80
-
-          # 3. PROMETHEUS - in monitoring namespace (use FQDN)
-          - path: /prometheus
-            pathType: Prefix
-            backend:
-              service:
-                name: prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local
-                port:
-                  number: 9090
-
-          # 4. GRAFANA - in monitoring namespace (use FQDN)
-          - path: /grafana
-            pathType: Prefix
-            backend:
-              service:
-                name: prometheus-grafana.monitoring.svc.cluster.local
                 port:
                   number: 80
