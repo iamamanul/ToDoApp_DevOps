@@ -51,5 +51,10 @@ COPY --from=builder /app/public ./public
 # 4. Optional: Copy package.json again for 'npm start' to work reliably
 COPY --from=builder /app/package.json ./package.json
 
+
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+
 EXPOSE 3000
-CMD ["npm","start"]
+# Change CMD to ENTRYPOINT to execute the shell script first
+ENTRYPOINT ["/bin/sh", "entrypoint.sh"]
