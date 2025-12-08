@@ -10,7 +10,7 @@ ENV NODE_OPTIONS="--openssl-legacy-provider"
 
 # 1. Copy package files (package.json and package-lock.json/npm-shrinkwrap.json)
 COPY package*.json ./
-COPY prisma ./prisma
+
 
 # 2. 🔥 CRITICAL FIX: Copy the entire source (including prisma/schema.prisma) 
 #    BEFORE running npm install, as the postinstall script needs the schema.
@@ -32,6 +32,8 @@ RUN npm run build
 FROM node:20-bullseye AS runner
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV NODE_OPTIONS="--openssl-legacy-provider"
@@ -51,10 +53,5 @@ COPY --from=builder /app/public ./public
 # 4. Optional: Copy package.json again for 'npm start' to work reliably
 COPY --from=builder /app/package.json ./package.json
 
-
-COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
-
 EXPOSE 3000
-# Change CMD to ENTRYPOINT to execute the shell script first
-ENTRYPOINT ["/bin/sh", "entrypoint.sh"]
+CMD ["npm","start"]
