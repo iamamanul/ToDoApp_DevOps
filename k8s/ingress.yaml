@@ -21,32 +21,29 @@ spec:
                 port:
                   number: 80
 
-          # 2. ARGOCD - in argocd namespace
+          # 2. ARGOCD - in argocd namespace (use FQDN)
           - path: /argocd
             pathType: Prefix
             backend:
               service:
-                name: argocd-server
-                namespace: argocd
+                name: argocd-server.argocd.svc.cluster.local
                 port:
                   number: 80
 
-          # 3. PROMETHEUS - in monitoring namespace
+          # 3. PROMETHEUS - in monitoring namespace (use FQDN)
           - path: /prometheus
             pathType: Prefix
             backend:
               service:
-                name: prometheus-kube-prometheus-prometheus
-                namespace: monitoring
+                name: prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local
                 port:
                   number: 9090
 
-          # 4. GRAFANA - in monitoring namespace
+          # 4. GRAFANA - in monitoring namespace (use FQDN)
           - path: /grafana
             pathType: Prefix
             backend:
               service:
-                name: prometheus-grafana
-                namespace: monitoring
+                name: prometheus-grafana.monitoring.svc.cluster.local
                 port:
                   number: 80
