@@ -10,6 +10,7 @@ ENV NODE_OPTIONS="--openssl-legacy-provider"
 
 # 1. Copy package files (package.json and package-lock.json/npm-shrinkwrap.json)
 COPY package*.json ./
+COPY prisma ./prisma
 
 # 2. 🔥 CRITICAL FIX: Copy the entire source (including prisma/schema.prisma) 
 #    BEFORE running npm install, as the postinstall script needs the schema.
