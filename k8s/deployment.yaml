@@ -26,7 +26,8 @@ spec:
           env:
             - name: NODE_OPTIONS
               value: "--openssl-legacy-provider"
-          command: ["npx", "prisma", "db", "push", "--accept-data-loss"] 
+          command: ["sh", "-c"] 
+          args: ["npx prisma migrate deploy"]
       containers:
         - name: web
           image: ghcr.io/iamamanul/todo-app:latest
